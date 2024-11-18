@@ -110,8 +110,8 @@ module GDAL
         return enum_for(:read_lines_by_block) unless block_given?
 
         read_blocks_by_block do |pixels, x_block_size, y_block_size|
-          pixels.each_slice(x_block_size).with_index do |row, block_row_number|
-            yield row
+          pixels.each_slice(block_size[:x]).with_index do |row, block_row_number|
+            yield row.take(x_block_size)
             break if block_row_number == y_block_size - 1
           end
         end
