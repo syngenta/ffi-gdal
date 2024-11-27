@@ -21,29 +21,32 @@ module GDAL
         end
       end
 
-      # Writes a 2-dimensional NArray of (x, y) pixels to the raster band using
-      # {GDAL::RasterBand#raster_io}. It determines +x_size+ and +y_size+ for
-      # the {GDAL::RasterBand#raster_io} call using the dimensions of the array.
-      #
+      # Writes a 2-dimensional NArray of (x, y) pixels to the raster band block-by-block.
+      # Expects the input array to have the same shape as the raster band.
       # @param pixel_array [NArray] The 2d list of pixels.
       def write_xy_narray(pixel_array)
         data_pointer = FFI::MemoryPointer.new(:buffer_out, block_buffer_size)
-        read_start = 0
 
         block_count[:y].times do |y_block_number|
           block_count[:x].times do |x_block_number|
+            # Create a block-sized NArray of zeros. This represents the block of pixels that will be written.
+            block_pixels = NArray.to_na(Array.new(block_size[:y]) { Array.new(block_size[:x], 0) })
+
             y_block_size = calculate_y_block_size(y_block_number)
             x_block_size = calculate_x_block_size(x_block_number)
 
-            pixel_count_per_block = x_block_size * y_block_size
-            read_range = (read_start...(read_start + pixel_count_per_block))
-            pixels = pixel_array[read_range]
-            GDAL._write_pointer(data_pointer, data_type, pixels.to_a)
+            # Map the range of pixels corresponding to the current block.
+            source_x_range = x_block_number * block_size[:x]...(x_block_number * block_size[:x]) + x_block_size
+            source_y_range = y_block_number * block_size[:y]...(y_block_number * block_size[:y]) + y_block_size
+
+            # Copy the corresponding pixels from the input array to the block pixels.
+            block_pixels[0...x_block_size, 0...y_block_size] = pixel_array[source_x_range, source_y_range]
+
+            GDAL._write_pointer(data_pointer, data_type, block_pixels.to_a.flatten)
 
             write_block(x_block_number, y_block_number, data_pointer)
 
             data_pointer.clear
-            read_start = read_range.end
           end
         end
       end
