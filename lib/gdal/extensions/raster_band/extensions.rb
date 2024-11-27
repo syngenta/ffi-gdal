@@ -30,7 +30,7 @@ module GDAL
       #
       # @return [NArray]
       def to_na(to_data_type = nil)
-        narray = to_nna
+        narray = NArray.to_na(to_a)
 
         return narray unless to_data_type
 
@@ -39,8 +39,11 @@ module GDAL
         narray.to_type(narray_type)
       end
 
+      # Iterates through all lines and builds an NArray of pixels.
+      #
+      # @return [Numo::NArray]
       def to_nna
-        NArray.to_na(to_a)
+        Numo::NArray[*to_a]
       end
 
       # Each pixel of the raster projected using the dataset's geo_transform.
