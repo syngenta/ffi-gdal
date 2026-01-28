@@ -25,6 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "ffi"
   spec.add_dependency "log_switch", "~> 1.0.0"
   spec.add_dependency "multi_xml"
-  spec.add_dependency "narray", "~> 0.6.0"
   spec.add_dependency "numo-narray"
 end

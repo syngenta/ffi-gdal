@@ -16,57 +16,57 @@ RSpec.describe "GDAL::RasterBand::Extensions" do
   describe "#to_na" do
     context "no conversion" do
       subject { raster_band.to_na }
-      it { is_expected.to eq(NArray.byte(15, 25)) }
+      it { is_expected.to eq(Numo::UInt8.zeros(25, 15)) }
     end
 
     context "convert to Int16" do
       subject { raster_band.to_na(:GDT_Int16) }
-      it { is_expected.to eq(NArray.sint(15, 25)) }
+      it { is_expected.to eq(Numo::Int16.zeros(25, 15)) }
     end
 
     context "convert to UInt16" do
       subject { raster_band.to_na(:GDT_UInt16) }
-      it { is_expected.to eq(NArray.int(15, 25)) }
+      it { is_expected.to eq(Numo::UInt16.zeros(25, 15)) }
     end
 
     context "convert to Int32" do
       subject { raster_band.to_na(:GDT_Int32) }
-      it { is_expected.to eq(NArray.int(15, 25)) }
+      it { is_expected.to eq(Numo::Int32.zeros(25, 15)) }
     end
 
     context "convert to UInt32" do
       subject { raster_band.to_na(:GDT_UInt32) }
-      it { is_expected.to eq(NArray.int(15, 25)) }
+      it { is_expected.to eq(Numo::UInt32.zeros(25, 15)) }
     end
 
     context "convert to Float32" do
       subject { raster_band.to_na(:GDT_Float32) }
-      it { is_expected.to eq(NArray.sfloat(15, 25)) }
+      it { is_expected.to eq(Numo::SFloat.zeros(25, 15)) }
     end
 
     context "convert to Float64" do
       subject { raster_band.to_na(:GDT_Float64) }
-      it { is_expected.to eq(NArray.float(15, 25)) }
+      it { is_expected.to eq(Numo::DFloat.zeros(25, 15)) }
     end
 
     context "convert to CInt16" do
       subject { raster_band.to_na(:GDT_CInt16) }
-      it { is_expected.to eq(NArray.scomplex(15, 25)) }
+      it { is_expected.to eq(Numo::SComplex.zeros(25, 15)) }
     end
 
     context "convert to CInt32" do
       subject { raster_band.to_na(:GDT_CInt32) }
-      it { is_expected.to eq(NArray.scomplex(15, 25)) }
+      it { is_expected.to eq(Numo::SComplex.zeros(25, 15)) }
     end
 
     context "convert to CFloat32" do
       subject { raster_band.to_na(:GDT_CFloat32) }
-      it { is_expected.to eq(NArray.scomplex(15, 25)) }
+      it { is_expected.to eq(Numo::SComplex.zeros(25, 15)) }
     end
 
     context "convert to CFloat64" do
       subject { raster_band.to_na(:GDT_CFloat64) }
-      it { is_expected.to eq(NArray.complex(15, 25)) }
+      it { is_expected.to eq(Numo::DComplex.zeros(25, 15)) }
     end
   end
 end
