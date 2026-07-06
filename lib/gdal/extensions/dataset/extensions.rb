@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "narray"
+require "numo/narray"
 require "ffi-gdal"
 require "gdal/dataset"
 require "gdal/raster_band"
@@ -193,11 +193,9 @@ module GDAL
       #
       #   # This array would look like:
       #   [[0, 10, 99, 2], [0, 10, 99, 150], [0, 10, 99, 250]]
-      # @return NArray
+      # @return Numo::NArray
       def to_na(to_data_type = nil)
-        na = NMatrix.to_na(raster_bands.map { |r| r.to_na(to_data_type) })
-
-        NArray[*na.transpose]
+        Numo::NArray[*raster_bands.map { |r| r.to_na(to_data_type) }.transpose]
       end
     end
   end
